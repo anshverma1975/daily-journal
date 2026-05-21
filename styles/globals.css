@@ -1,0 +1,508 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f7f5f0;
+  --surface: #ffffff;
+  --border: #e8e4dc;
+  --text: #1a1916;
+  --muted: #8c8880;
+  --hint: #b8b4ac;
+  --accent: #3d5a47;
+  --accent-light: #e8efe9;
+  --dot: #6b9e7a;
+  --today-bg: #f0ebe0;
+  --sel-bg: #3d5a47;
+  --sel-text: #ffffff;
+  --radius: 10px;
+}
+
+html, body { height: 100%; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Loading */
+.loading {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dot-pulse {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:.2} 50%{opacity:1} }
+
+/* Login */
+.login-bg {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+}
+.login-card {
+  text-align: center;
+  padding: 3rem 2.5rem;
+  max-width: 340px;
+  width: 100%;
+}
+.login-icon {
+  font-size: 2.5rem;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  display: block;
+}
+.login-title {
+  font-family: 'Lora', serif;
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.login-sub {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+.google-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 22px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  transition: background 0.15s, border-color 0.15s;
+}
+.google-btn:hover { background: var(--bg); border-color: var(--hint); }
+
+/* App shell */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.brand {
+  font-family: 'Lora', serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--text);
+}
+.user-area { display: flex; align-items: center; gap: 12px; }
+.avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+}
+.signout-btn {
+  background: none;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px 0;
+}
+.signout-btn:hover { color: var(--text); }
+
+/* Main layout */
+.main {
+  flex: 1;
+  display: flex;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  gap: 2.5rem;
+  align-items: flex-start;
+}
+
+/* Calendar */
+.cal-section {
+  width: 280px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+.cal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.cal-nav button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+}
+.cal-nav button:hover { color: var(--text); background: var(--bg); }
+.cal-title {
+  font-family: 'Lora', serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text);
+}
+.day-labels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4px;
+}
+.day-labels span {
+  text-align: center;
+  font-size: 11px;
+  color: var(--hint);
+  padding: 3px 0;
+  font-weight: 400;
+}
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.cal-day {
+  position: relative;
+  aspect-ratio: 1;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transition: background 0.1s;
+}
+.cal-day:hover:not(.sel) { background: var(--bg); }
+.cal-day.other { color: var(--hint); }
+.cal-day.today:not(.sel) { background: var(--today-bg); font-weight: 500; }
+.cal-day.sel { background: var(--sel-bg); color: var(--sel-text); border-radius: 6px; }
+.dot {
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: var(--dot);
+  display: block;
+}
+.cal-day.sel .dot { background: rgba(255,255,255,0.6); }
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 1rem;
+  font-size: 11px;
+  color: var(--hint);
+}
+.dot-small {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--dot);
+  display: inline-block;
+}
+
+/* Journal */
+.journal-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: calc(100vh - 160px);
+}
+.journal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.journal-weekday {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+.journal-date-full {
+  font-family: 'Lora', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--text);
+}
+.save-btn {
+  padding: 8px 18px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.save-btn:hover { background: #2d4435; }
+.save-btn.saved { background: var(--dot); }
+.save-btn:disabled { opacity: 0.7; cursor: default; }
+
+.journal-area {
+  flex: 1;
+  min-height: 420px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  font-family: 'Lora', serif;
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--text);
+  background: var(--surface);
+  resize: none;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.journal-area::placeholder { color: var(--hint); font-style: italic; }
+.journal-area:focus { border-color: var(--hint); }
+
+.wc {
+  font-size: 12px;
+  color: var(--hint);
+  text-align: right;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .main {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+  .cal-section { width: 100%; }
+  .journal-area { min-height: 300px; }
+}
+
+
+
+/* ===== subtle cinematic enhancements ===== */
+
+/* soft fade-in page */
+
+.login-card {
+  position: relative;
+
+  animation:
+    cardEnter 1.6s ease forwards;
+
+  opacity: 0;
+
+  transform: translateY(18px);
+}
+
+@keyframes cardEnter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+/* smooth cinematic title */
+
+.login-title {
+  opacity: 0;
+
+  transform:
+    translateY(14px) scale(0.98);
+
+  filter: blur(8px);
+
+  animation:
+    smoothReveal 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+  animation-delay: 0.3s;
+}
+
+@keyframes smoothReveal {
+
+  0% {
+    opacity: 0;
+
+    transform:
+      translateY(14px) scale(0.98);
+
+    filter: blur(8px);
+  }
+
+  100% {
+    opacity: 1;
+
+    transform:
+      translateY(0) scale(1);
+
+    filter: blur(0);
+  }
+}
+
+/* subtitle delayed fade */
+
+.fade-in-delay {
+  opacity: 0;
+
+  animation:
+    fadeIn 1.4s ease forwards;
+
+  animation-delay: 2.2s;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* ambient floating background */
+
+.login-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+/* grain texture */
+
+.login-bg::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  opacity: 0.035;
+
+  background-image:
+    radial-gradient(#000 0.4px, transparent 0.4px);
+
+  background-size: 4px 4px;
+
+  pointer-events: none;
+}
+
+/* soft floating light */
+
+.login-bg::after {
+  content: "";
+
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  background:
+    radial-gradient(circle,
+      rgba(232, 239, 233, 0.9),
+      transparent 70%);
+
+  top: -120px;
+  right: -120px;
+
+  filter: blur(40px);
+
+  animation:
+    floatOrb 9s ease-in-out infinite;
+}
+
+@keyframes floatOrb {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-18px);
+  }
+}
+
+/* elegant button motion */
+
+.google-btn {
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.google-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.04);
+}
+
+/* subtle icon glow */
+
+.login-icon {
+  position: relative;
+
+  animation:
+    softPulse 4s ease-in-out infinite;
+}
+
+@keyframes softPulse {
+
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* smoother card */
+
+.login-card {
+  backdrop-filter: blur(6px);
+}
+
+/* cinematic timing */
+
+.login-title,
+.login-sub,
+.google-btn {
+  will-change: transform, opacity;
+}
