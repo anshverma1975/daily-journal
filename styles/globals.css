@@ -548,23 +548,4 @@ body {
   width: 20px;
   height: 20px;
   opacity: 0.4;
-}* { cursor: none !important; }
-
-.cursor {
-  width: 10px;
-  height: 10px;
-  border: 1.5px solid var(--accent);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
-  z-index: 9999;
-  opacity: 0.7;
-}
-
-.cursor.hover {
-  width: 20px;
-  height: 20px;
-  opacity: 0.4;
 }
