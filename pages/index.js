@@ -5,6 +5,7 @@ const MONTHS = ["January","February","March","April","May","June","July","August
 const WEEKDAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const SHORT_DAYS = ["Su","Mo","Tu","We","Th","Fr","Sa"];
 
+
 function toKey(y, m, d) {
   return `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 }
@@ -25,6 +26,34 @@ export default function Home() {
   const [draft, setDraft] = useState("");
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
+  const isFuture = new Date(selected.y, selected.m, selected.d) > today;
+
+
+  useEffect(() => {
+  const cursor = document.createElement('div');
+  cursor.classList.add('cursor');
+  document.body.appendChild(cursor);
+
+  const move = (e) => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  };
+
+  const addHover = () => cursor.classList.add('hover');
+  const removeHover = () => cursor.classList.remove('hover');
+
+  window.addEventListener('mousemove', move);
+  document.querySelectorAll('button, a, textarea').forEach(el => {
+    el.addEventListener('mouseenter', addHover);
+    el.addEventListener('mouseleave', removeHover);
+  });
+
+  return () => {
+    window.removeEventListener('mousemove', move);
+    document.body.removeChild(cursor);
+  };
+}, []);
+
 
   useEffect(() => {
     if (!session) return;
@@ -160,7 +189,7 @@ export default function Home() {
                 {MONTHS[selected.m]} {selected.d}, {selected.y}
               </div>
             </div>
-            <button className={`save-btn ${saved ? "saved" : ""}`} onClick={handleSave} disabled={saving}>
+            <button className={`save-btn ${saved ? "saved" : ""}`} onClick={handleSave} disabled={saving || isFuture}>
               {saved ? "saved ✓" : saving ? "saving…" : "save"}
             </button>
           </div>
@@ -168,9 +197,15 @@ export default function Home() {
             className="journal-area"
             value={draft}
             onChange={e => { setDraft(e.target.value); setSaved(false); }}
-            placeholder="write about your day…"
+            placeholder={isFuture ? "" : "write about your day…"}
             autoFocus
+            disabled={isFuture}
           />
+          {isFuture && (
+            <p className="future-note">
+              ✦ this day hasn't arrived yet
+            </p>
+          )}
           <div className="wc">{wordCount(draft)} {wordCount(draft) === 1 ? "word" : "words"}</div>
         </section>
       </main>
