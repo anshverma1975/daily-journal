@@ -1,46 +1,27 @@
+import { Redis } from '@upstash/redis';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextauth]";
-import fs from "fs";
-import path from "path";
 
-const DATA_DIR = path.join(process.cwd(), "data");
-
-function getUserFile(email) {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-  const safe = email.replace(/[^a-z0-9]/gi, "_");
-  return path.join(DATA_DIR, `${safe}.json`);
-}
-
-function loadEntries(email) {
-  const file = getUserFile(email);
-  if (!fs.existsSync(file)) return {};
-  return JSON.parse(fs.readFileSync(file, "utf8"));
-}
-
-function saveEntries(email, entries) {
-  fs.writeFileSync(getUserFile(email), JSON.stringify(entries, null, 2));
-}
+const redis = Redis.fromEnv();
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   if (!session) return res.status(401).json({ error: "Unauthorized" });
 
-  const email = session.user.email;
+  const email = session.user.email.replace(/[^a-z0-9]/gi, "_");
 
   if (req.method === "GET") {
-    return res.status(200).json(loadEntries(email));
+    const entries = await redis.get(email) || {};
+    return res.status(200).json(entries);
   }
 
   if (req.method === "POST") {
     const { date, text } = req.body;
     if (!date) return res.status(400).json({ error: "date required" });
-    const entries = loadEntries(email);
-    if (text === "" || text == null) {
-      delete entries[date];
-    } else {
-      entries[date] = text;
-    }
-    saveEntries(email, entries);
+    const entries = await redis.get(email) || {};
+    if (!text?.trim()) delete entries[date];
+    else entries[date] = text;
+    await redis.set(email, entries);
     return res.status(200).json({ ok: true });
   }
 
