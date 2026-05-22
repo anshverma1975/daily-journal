@@ -140,17 +140,27 @@ export default function Home() {
     return (
       <div className="login-bg">
         <div className="login-card">
-          <div className="login-icon">◈</div>
+          <div className="login-top-line" />
+          <span className="login-icon">◈</span>
           <h1 className="login-title">journal</h1>
           <p className="login-sub fade-in-delay">a quiet place to write every day</p>
+          <div className="login-divider">
+            <span /><span className="login-dot">◆</span><span />
+          </div>
           <button className="google-btn" onClick={() => signIn("google")}>
             <GoogleIcon />
             continue with google
           </button>
+          <p className="login-footer">your thoughts, safe and private</p>
         </div>
+        <div className="login-corner tl">◈</div>
+        <div className="login-corner tr">◈</div>
+        <div className="login-corner bl">◈</div>
+        <div className="login-corner br">◈</div>
       </div>
     );
   }
+
 
   const cells = buildCalendar();
   const selectedDate = new Date(selected.y, selected.m, selected.d);
