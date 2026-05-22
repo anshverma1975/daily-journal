@@ -81,21 +81,34 @@ body {
   from {opacity: 0; }
   to {opacity: 1; }
 }
+
 .google-btn {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 11px 22px;
+  gap: 12px;
+  padding: 14px 32px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 100px;
   background: var(--surface);
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Lora', serif;
   font-size: 14px;
-  color: var(--text);
-  transition: background 0.15s, border-color 0.15s;
+  font-style: italic;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  transition: all 0.3s ease;
 }
-.google-btn:hover { background: var(--bg); border-color: var(--hint); }
+
+.google-btn:hover {
+  border-color: #3d5a47;
+  color: var(--text);
+  transform: translateY(-3px);
+  background: #f0f5f1;
+  box-shadow:
+    0 0 0 3px rgba(61, 90, 71, 0.15),
+    0 8px 30px rgba(61, 90, 71, 0.25),
+    0 0 60px rgba(107, 158, 122, 0.3);
+}
 
 /* App shell */
 .app {
