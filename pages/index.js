@@ -26,6 +26,18 @@ const PLACEHOLDERS = [
   "what did today teach you?",
   "pour it all out here…",
 ];
+const TOAST_MESSAGES = [
+  "✦ all saved",
+  "✦ words kept safe",
+  "✦ tucked away nicely",
+  "✦ your day, remembered",
+  "✦ saved with care",
+  "✦ memory preserved",
+  "✦ held safely",
+  "✦ written and kept",
+  "✦ your words are safe",
+  "✦ another day, captured",
+];
 
 function toKey(y, m, d) {
   return `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
@@ -53,6 +65,8 @@ export default function Home() {
   const [saving, setSaving] = useState(false);
   const isFuture = new Date(selected.y, selected.m, selected.d) > today;
   const [placeholder, setPlaceholder] = useState(randomPlaceholder);
+  const [toast, setToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
 
   useEffect(() => {
     const cursor = document.createElement('div');
@@ -108,7 +122,9 @@ export default function Home() {
     });
     setSaving(false);
     setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setToast(true);
+    setToastMsg(TOAST_MESSAGES[Math.floor(Math.random() * TOAST_MESSAGES.length)]);
+    setTimeout(() => { setSaved(false); setToast(false); }, 2000);
   }, [selected, draft]);
 
   useEffect(() => {
@@ -160,7 +176,6 @@ export default function Home() {
       </div>
     );
   }
-
 
   const cells = buildCalendar();
   const selectedDate = new Date(selected.y, selected.m, selected.d);
@@ -245,6 +260,7 @@ export default function Home() {
           <div className="wc">{wordCount(draft)} {wordCount(draft) === 1 ? "word" : "words"}</div>
         </section>
       </main>
+      <div className={`toast ${toast ? "show" : ""}`}>{toastMsg}</div>
     </div>
   );
 }
