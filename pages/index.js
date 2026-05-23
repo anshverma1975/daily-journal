@@ -38,6 +38,16 @@ const TOAST_MESSAGES = [
   "✦ your words are safe",
   "✦ another day, captured",
 ];
+const SPLASH_MESSAGES = [
+  "gathering your thoughts…",
+  "opening your pages…",
+  "finding your words…",
+  "preparing your space…",
+  "settling in…",
+  "your journal awaits…",
+  "making room for you…",
+  "almost there…",
+];
 
 function toKey(y, m, d) {
   return `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
@@ -67,6 +77,16 @@ export default function Home() {
   const [placeholder, setPlaceholder] = useState(randomPlaceholder);
   const [toast, setToast] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
+  const [splash, setSplash] = useState(true);
+  const [splashMsg, setSplashMsg] = useState("");
+  useEffect(() => {
+    setSplashMsg(SPLASH_MESSAGES[Math.floor(Math.random() * SPLASH_MESSAGES.length)]);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setSplash(false), 2600);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const cursor = document.createElement('div');
@@ -150,7 +170,14 @@ export default function Home() {
     return cells;
   }
 
-  if (status === "loading") return <div className="loading"><span className="dot-pulse" /></div>;
+  if (status === "loading" || (splash && session)) {
+    return (
+      <div className="splash">
+        <p className="splash-msg">{splashMsg}</p>
+        <span className="splash-dot"></span>
+      </div>
+    );
+  }
 
   if (!session) {
     return (

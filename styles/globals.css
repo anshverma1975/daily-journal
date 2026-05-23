@@ -658,3 +658,60 @@ body {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+.splash {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  animation: fadeOut 0.5s ease 2.2s forwards;
+}
+
+.splash-msg {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  animation: typeIn 1.2s ease 0.2s forwards;
+}
+
+.splash-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 1.2rem;
+  opacity: 0;
+  animation: fadeIn 0.5s ease 1.6s forwards, blink 1s ease 1.6s infinite;
+}
+
+@keyframes typeIn {
+  to {
+    width: 260px;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 0.2
+  }
+
+  50% {
+    opacity: 0.8
+  }
+}
