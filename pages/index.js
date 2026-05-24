@@ -40,7 +40,7 @@ const TOAST_MESSAGES = [
 ];
 const SPLASH_MESSAGES = [
   "gathering your thoughts…",
-  "opening your pages…",
+  "opening your memories…",
   "finding your words…",
   "preparing your space…",
   "settling in…",
