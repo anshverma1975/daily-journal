@@ -669,13 +669,18 @@ body {
   animation: fadeOut 0.5s ease 2.2s forwards;
 }
 
+.splash-msg-wrap {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
 .splash-msg {
   font-family: 'Lora', serif;
   font-style: italic;
   font-size: 15px;
   color: var(--muted);
   letter-spacing: 0.06em;
-  overflow: hidden;
   white-space: nowrap;
   width: 0;
   animation: typeIn 1.2s ease 0.2s forwards;
@@ -713,5 +718,106 @@ body {
 
   50% {
     opacity: 0.8
+  }
+}
+
+
+.shooting-star {
+  position: fixed;
+  pointer-events: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #c8c4bc, transparent);
+  animation: shoot linear infinite;
+  opacity: 0;
+  border-radius: 100px;
+}
+
+@keyframes shoot {
+  0% {
+    opacity: 0;
+    transform: translateX(0) translateY(0) rotate(-35deg);
+  }
+
+  5% {
+    opacity: 1;
+  }
+
+  40% {
+    opacity: 0.8;
+  }
+
+  60% {
+    opacity: 0;
+    transform: translateX(300px) translateY(180px) rotate(-35deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(300px) translateY(180px) rotate(-35deg);
+  }
+}
+
+.constellation {
+  position: fixed;
+  pointer-events: none;
+  opacity: 0;
+  animation: constellationFade ease-in-out infinite;
+}
+
+@keyframes constellationFade {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes floatDeco {
+  0% {
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-110vh) rotate(180deg);
+  }
+}
+
+@keyframes floatStar {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
   }
 }

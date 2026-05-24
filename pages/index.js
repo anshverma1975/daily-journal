@@ -79,6 +79,7 @@ export default function Home() {
   const [toastMsg, setToastMsg] = useState("");
   const [splash, setSplash] = useState(true);
   const [splashMsg, setSplashMsg] = useState("");
+
   useEffect(() => {
     setSplashMsg(SPLASH_MESSAGES[Math.floor(Math.random() * SPLASH_MESSAGES.length)]);
   }, []);
@@ -87,6 +88,25 @@ export default function Home() {
     const timer = setTimeout(() => setSplash(false), 2600);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!splash) return;
+    const symbols = ['✦', '✧', '⋆', '·', '✦', '✧', '⋆'];
+    const stars = [];
+    for (let i = 0; i < 18; i++) {
+      const star = document.createElement('span');
+      star.style.cssText = `position:fixed;pointer-events:none;color:#c8c4bc;animation:floatStar linear infinite;opacity:0;font-style:normal;`;
+      star.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.top = Math.random() * 100 + 'vh';
+      star.style.fontSize = (Math.random() * 10 + 8) + 'px';
+      star.style.animationDuration = (Math.random() * 8 + 6) + 's';
+      star.style.animationDelay = (Math.random() * 4) + 's';
+      document.body.appendChild(star);
+      stars.push(star);
+    }
+    return () => stars.forEach(s => document.body.removeChild(s));
+  }, [splash]);
 
   useEffect(() => {
     const cursor = document.createElement('div');
@@ -112,6 +132,47 @@ export default function Home() {
       document.body.removeChild(cursor);
     };
   }, []);
+
+  useEffect(() => {
+    if (session) return;
+    const symbols = ['✦', '✧', '⋆', '·', '◦', '∘'];
+    const decos = [];
+
+    for (let i = 0; i < 22; i++) {
+      const el = document.createElement('span');
+      el.style.cssText = `position:fixed;pointer-events:none;color:#c8c4bc;animation:floatDeco linear infinite;opacity:0;`;
+      el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.top = (Math.random() * 100 + 20) + 'vh';
+      el.style.fontSize = (Math.random() * 10 + 6) + 'px';
+      el.style.animationDuration = (Math.random() * 12 + 10) + 's';
+      el.style.animationDelay = (Math.random() * 6) + 's';
+      document.body.appendChild(el);
+      decos.push(el);
+    }
+
+    const planets = [
+      [`<ellipse cx="36" cy="36" rx="34" ry="8" stroke="#c8c4bc" stroke-width="1" opacity="0.5"/><circle cx="36" cy="36" r="20" stroke="#c8c4bc" stroke-width="1.2" fill="#f5f2ed" fill-opacity="0.6"/><path d="M18 32 Q36 29 54 32" stroke="#d4cfc8" stroke-width="0.9" fill="none"/><path d="M17 36 Q36 39 55 36" stroke="#d4cfc8" stroke-width="0.7" fill="none"/>`, '72 72', 60],
+      [`<ellipse cx="40" cy="46" rx="38" ry="9" stroke="#c8c4bc" stroke-width="1" fill="#f5f2ed" fill-opacity="0.3" opacity="0.6"/><circle cx="40" cy="40" r="18" stroke="#c8c4bc" stroke-width="1.2" fill="#f5f2ed" fill-opacity="0.7"/><path d="M25 36 Q40 33 55 36" stroke="#d4cfc8" stroke-width="0.8" fill="none"/>`, '80 80', 70],
+      [`<path d="M20 6 A12 12 0 1 0 20 26 A8 8 0 1 1 20 6Z" stroke="#c8c4bc" stroke-width="1" fill="#f5f2ed" fill-opacity="0.5"/>`, '32 32', 28],
+      [`<circle cx="46" cy="10" r="4" stroke="#c8c4bc" stroke-width="1" fill="#f5f2ed" fill-opacity="0.5"/><path d="M42 8 Q20 4 2 10 Q20 16 42 12" stroke="#c8c4bc" stroke-width="0.7" fill="#f5f2ed" fill-opacity="0.15"/>`, '55 20', 50],
+    ];
+
+    planets.forEach(([inner, vb, size]) => {
+      const el = document.createElement('div');
+      el.style.cssText = `position:fixed;pointer-events:none;animation:floatDeco linear infinite;opacity:0;`;
+      el.innerHTML = `<svg viewBox="0 0 ${vb}" fill="none">${inner}</svg>`;
+      el.style.width = size + 'px';
+      el.style.left = (10 + Math.random() * 80) + 'vw';
+      el.style.top = (Math.random() * 100 + 20) + 'vh';
+      el.style.animationDuration = (Math.random() * 10 + 18) + 's';
+      el.style.animationDelay = (Math.random() * 8) + 's';
+      document.body.appendChild(el);
+      decos.push(el);
+    });
+
+    return () => decos.forEach(el => document.body.removeChild(el));
+  }, [session]);
 
   useEffect(() => {
     if (!session) return;
@@ -173,7 +234,9 @@ export default function Home() {
   if (status === "loading" || (splash && session)) {
     return (
       <div className="splash">
-        <p className="splash-msg">{splashMsg}</p>
+        <div className="splash-msg-wrap">
+          <p className="splash-msg">{splashMsg}</p>
+        </div>
         <span className="splash-dot"></span>
       </div>
     );
@@ -182,6 +245,10 @@ export default function Home() {
   if (!session) {
     return (
       <div className="login-bg">
+        <div className="login-corner tl">◈</div>
+        <div className="login-corner tr">◈</div>
+        <div className="login-corner bl">◈</div>
+        <div className="login-corner br">◈</div>
         <div className="login-card">
           <div className="login-top-line" />
           <span className="login-icon">◈</span>
@@ -196,10 +263,6 @@ export default function Home() {
           </button>
           <p className="login-footer">your thoughts, safe and private</p>
         </div>
-        <div className="login-corner tl">◈</div>
-        <div className="login-corner tr">◈</div>
-        <div className="login-corner bl">◈</div>
-        <div className="login-corner br">◈</div>
       </div>
     );
   }
