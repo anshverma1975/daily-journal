@@ -79,6 +79,28 @@ export default function Home() {
   const [toastMsg, setToastMsg] = useState("");
   const [splash, setSplash] = useState(true);
   const [splashMsg, setSplashMsg] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 480);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const strip = document.querySelector('.strip');
+    const sel = document.querySelector('.day-item.sel');
+    if (!strip || !sel) return;
+    const timer = setTimeout(() => {
+      const stripRect = strip.getBoundingClientRect();
+      const selRect = sel.getBoundingClientRect();
+      const scrollLeft = sel.offsetLeft - strip.offsetLeft - (stripRect.width / 2) + (selRect.width / 2);
+      strip.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [isMobile, selected, month, year]);
 
   useEffect(() => {
     setSplashMsg(SPLASH_MESSAGES[Math.floor(Math.random() * SPLASH_MESSAGES.length)]);
@@ -231,7 +253,9 @@ export default function Home() {
     return cells;
   }
 
-  if (status === "loading" || (splash && session)) {
+  if (status === "loading") return <div className="loading"><span className="dot-pulse" /></div>;
+
+  if (splash && session) {
     return (
       <div className="splash">
         <div className="splash-msg-wrap">
@@ -284,42 +308,79 @@ export default function Home() {
 
       <main className="main">
         <section className="cal-section">
-          <div className="cal-nav">
-            <button onClick={() => { if (month === 0) { setMonth(11); setYear(y => y - 1); } else setMonth(m => m - 1); }} aria-label="Previous">‹</button>
-            <span className="cal-title">{MONTHS[month]} {year}</span>
-            <button onClick={() => { if (month === 11) { setMonth(0); setYear(y => y + 1); } else setMonth(m => m + 1); }} aria-label="Next">›</button>
-          </div>
-          <div className="day-labels">
-            {SHORT_DAYS.map(d => <span key={d}>{d}</span>)}
-          </div>
-          <div className="cal-grid">
-            {cells.map((c, i) => {
-              const key = toKey(c.y, c.m, c.d);
-              const hasEntry = !!entries[key];
-              return (
-                <button
-                  key={i}
-                  onClick={() => {
-                    setSelected({ y: c.y, m: c.m, d: c.d });
-                    setPlaceholder(randomPlaceholder());
-                    if (c.other) { setMonth(c.m < 0 ? 11 : c.m > 11 ? 0 : c.m); setYear(c.y); }
-                  }}
-                  className={[
-                    "cal-day",
-                    c.other ? "other" : "",
-                    isToday(c) ? "today" : "",
-                    isSelected(c) ? "sel" : "",
-                  ].join(" ")}
-                >
-                  {c.d}
-                  {hasEntry && <span className="dot" />}
-                </button>
-              );
-            })}
-          </div>
-          <div className="legend">
-            <span className="dot-small" /> entry written
-          </div>
+          {isMobile ? (
+            <div className="date-strip-wrap">
+              <div className="month-nav">
+                <button onClick={() => { if (month === 0) { setMonth(11); setYear(y => y - 1); } else setMonth(m => m - 1); }}>‹</button>
+                <span className="cal-title">{MONTHS[month]} {year}</span>
+                <button onClick={() => { if (month === 11) { setMonth(0); setYear(y => y + 1); } else setMonth(m => m + 1); }}>›</button>
+              </div>
+              <div className="strip">
+                {Array.from({ length: new Date(year, month + 1, 0).getDate() }, (_, i) => i + 1).map(d => {
+                  const date = new Date(year, month, d);
+                  const key = toKey(year, month, d);
+                  const isDayToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+                  const isSel = d === selected.d && month === selected.m && year === selected.y;
+                  const isFutureDay = new Date(year, month, d) > today;
+                  return (
+                    <div
+                      key={d}
+                      className={`day-item ${isDayToday ? 'today' : ''} ${isSel ? 'sel' : ''} ${isFutureDay ? 'future' : ''}`}
+                      onClick={() => {
+                        setSelected({ y: year, m: month, d });
+                        setPlaceholder(randomPlaceholder());
+                      }}
+                    >
+                      <span className="day-name">{SHORT_DAYS[date.getDay()]}</span>
+                      <div className="day-num">
+                        {d}
+                        {entries[key] && <span className="entry-dot" />}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="cal-nav">
+                <button onClick={() => { if (month === 0) { setMonth(11); setYear(y => y - 1); } else setMonth(m => m - 1); }} aria-label="Previous">‹</button>
+                <span className="cal-title">{MONTHS[month]} {year}</span>
+                <button onClick={() => { if (month === 11) { setMonth(0); setYear(y => y + 1); } else setMonth(m => m + 1); }} aria-label="Next">›</button>
+              </div>
+              <div className="day-labels">
+                {SHORT_DAYS.map(d => <span key={d}>{d}</span>)}
+              </div>
+              <div className="cal-grid">
+                {cells.map((c, i) => {
+                  const key = toKey(c.y, c.m, c.d);
+                  const hasEntry = !!entries[key];
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => {
+                        setSelected({ y: c.y, m: c.m, d: c.d });
+                        setPlaceholder(randomPlaceholder());
+                        if (c.other) { setMonth(c.m < 0 ? 11 : c.m > 11 ? 0 : c.m); setYear(c.y); }
+                      }}
+                      className={[
+                        "cal-day",
+                        c.other ? "other" : "",
+                        isToday(c) ? "today" : "",
+                        isSelected(c) ? "sel" : "",
+                      ].join(" ")}
+                    >
+                      {c.d}
+                      {hasEntry && <span className="dot" />}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="legend">
+                <span className="dot-small" /> entry written
+              </div>
+            </>
+          )}
         </section>
 
         <section className="journal-section">

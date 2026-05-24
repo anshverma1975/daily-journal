@@ -617,22 +617,42 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 640px) {
+@media (max-width: 480px) {
   .main {
     flex-direction: column;
-    padding: 1rem;
-    gap: 1.5rem;
+    padding: 0;
+    gap: 0;
   }
 
   .cal-section {
     width: 100%;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 0.5rem 0.5rem;
+  }
+
+  .journal-section {
+    width: 100%;
+    padding: 1rem;
+    min-height: unset;
   }
 
   .journal-area {
-    min-height: 300px;
+    min-height: 60vh;
+    width: 100%;
+  }
+
+  .journal-date-full {
+    font-size: 20px;
+  }
+
+  .topbar {
+    padding: 10px 16px;
   }
 }
 
+/* Toast */
 .toast {
   position: fixed;
   bottom: 32px;
@@ -820,4 +840,93 @@ body {
     transform: translateY(-100vh) rotate(360deg);
     opacity: 0;
   }
+}
+
+.date-strip-wrap {
+  width: 100%;
+  padding-bottom: 0.5rem;
+}
+
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 0.75rem;
+}
+
+.month-nav button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.strip {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+
+.strip::-webkit-scrollbar {
+  display: none;
+}
+
+.day-item {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.day-name {
+  font-size: 10px;
+  color: var(--hint);
+  text-transform: lowercase;
+}
+
+.day-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--text);
+  gap: 3px;
+  transition: background 0.1s;
+}
+
+.day-item.today .day-num {
+  background: var(--today-bg);
+  font-weight: 500;
+}
+
+.day-item.sel .day-num {
+  background: var(--sel-bg);
+  color: white;
+}
+
+.day-item.future .day-name,
+.day-item.future .day-num {
+  color: var(--hint);
+}
+
+.entry-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--dot);
+  display: block;
+}
+
+.day-item.sel .entry-dot {
+  background: rgba(255, 255, 255, 0.7);
 }
