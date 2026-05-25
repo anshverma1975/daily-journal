@@ -606,7 +606,7 @@ body {
   pointer-events: none;
   transform: translate(-50%, -50%);
   transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
-  z-index: 9999;
+  z-index: 100000;
   opacity: 0.7;
 }
 
@@ -929,4 +929,78 @@ body {
 
 .day-item.sel .entry-dot {
   background: rgba(255, 255, 255, 0.7);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  max-width: 320px;
+  width: 90%;
+  text-align: center;
+  animation: cardEnter 0.2s ease;
+}
+
+.modal-title {
+  font-family: 'Lora', serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.modal-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.modal-btn {
+  padding: 8px 20px;
+  border-radius: 7px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+
+.modal-btn.discard {
+  background: var(--bg);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.modal-btn.discard:hover {
+  background: var(--border);
+  color: var(--text);
+}
+
+.modal-btn.save {
+  background: var(--accent);
+  color: white;
+}
+
+.modal-btn.save:hover {
+  background: #2d4435;
 }

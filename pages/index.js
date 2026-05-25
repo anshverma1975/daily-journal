@@ -80,6 +80,8 @@ export default function Home() {
   const [splash, setSplash] = useState(true);
   const [splashMsg, setSplashMsg] = useState("");
   const [isMobile, setIsMobile] = useState(false);
+  const [showUnsavedModal, setShowUnsavedModal] = useState(false);
+  const [pendingDate, setPendingDate] = useState(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 480);
@@ -230,6 +232,20 @@ export default function Home() {
     setTimeout(() => { setSaved(false); setToast(false); }, 2000);
   }, [selected, draft]);
 
+  const handlePendingNav = useCallback(async (save) => {
+    if (save) await handleSave();
+    setShowUnsavedModal(false);
+    if (pendingDate) {
+      setSelected({ y: pendingDate.y, m: pendingDate.m, d: pendingDate.d });
+      setPlaceholder(randomPlaceholder());
+      if (pendingDate.other) {
+        setMonth(pendingDate.m < 0 ? 11 : pendingDate.m > 11 ? 0 : pendingDate.m);
+        setYear(pendingDate.y);
+      }
+      setPendingDate(null);
+    }
+  }, [pendingDate, handleSave]);
+
   useEffect(() => {
     const handler = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "s") { e.preventDefault(); handleSave(); }
@@ -327,8 +343,15 @@ export default function Home() {
                       key={d}
                       className={`day-item ${isDayToday ? 'today' : ''} ${isSel ? 'sel' : ''} ${isFutureDay ? 'future' : ''}`}
                       onClick={() => {
-                        setSelected({ y: year, m: month, d });
-                        setPlaceholder(randomPlaceholder());
+                        const key = toKey(selected.y, selected.m, selected.d);
+                        const isDirty = draft !== (entries[key] || "");
+                        if (isDirty) {
+                          setPendingDate({ y: year, m: month, d });
+                          setShowUnsavedModal(true);
+                        } else {
+                          setSelected({ y: year, m: month, d });
+                          setPlaceholder(randomPlaceholder());
+                        }
                       }}
                     >
                       <span className="day-name">{SHORT_DAYS[date.getDay()]}</span>
@@ -359,9 +382,16 @@ export default function Home() {
                     <button
                       key={i}
                       onClick={() => {
-                        setSelected({ y: c.y, m: c.m, d: c.d });
-                        setPlaceholder(randomPlaceholder());
-                        if (c.other) { setMonth(c.m < 0 ? 11 : c.m > 11 ? 0 : c.m); setYear(c.y); }
+                        const key = toKey(selected.y, selected.m, selected.d);
+                        const isDirty = draft !== (entries[key] || "");
+                        if (isDirty) {
+                          setPendingDate({ y: c.y, m: c.m, d: c.d, other: c.other });
+                          setShowUnsavedModal(true);
+                        } else {
+                          setSelected({ y: c.y, m: c.m, d: c.d });
+                          setPlaceholder(randomPlaceholder());
+                          if (c.other) { setMonth(c.m < 0 ? 11 : c.m > 11 ? 0 : c.m); setYear(c.y); }
+                        }
                       }}
                       className={[
                         "cal-day",
@@ -412,6 +442,19 @@ export default function Home() {
         </section>
       </main>
       <div className={`toast ${toast ? "show" : ""}`}>{toastMsg}</div>
+
+      {showUnsavedModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <p className="modal-title">Uh oh, you didn't save 🙊</p>
+            <p className="modal-sub">Remember to save your entry ✨ </p>
+            <div className="modal-actions">
+              <button className="modal-btn discard" onClick={() => handlePendingNav(false)}>Discard </button>
+              <button className="modal-btn save" onClick={() => handlePendingNav(true)}>Save & continue</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
