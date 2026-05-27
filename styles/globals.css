@@ -1004,3 +1004,72 @@ body {
 .modal-btn.save:hover {
   background: #2d4435;
 }
+
+[data-theme="dark"] {
+  --bg: #141412;
+  --surface: #1a1916;
+  --border: #2a2825;
+  --text: #e8e4dc;
+  --muted: #6b6760;
+  --hint: #4a4845;
+  --accent: #6b9e7a;
+  --accent-light: #1a2e1f;
+  --dot: #6b9e7a;
+  --today-bg: #1f1e1a;
+  --sel-bg: #3d5a47;
+  --sel-text: #ffffff;
+}
+
+body,
+.topbar,
+.cal-section,
+.journal-area,
+.login-bg,
+.login-card {
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+[data-theme="dark"] .google-btn {
+  background: #1a1916;
+  color: var(--muted);
+}
+
+[data-theme="dark"] .journal-area {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background 0.15s;
+  line-height: 1;
+}
+
+.theme-toggle:hover {
+  background: var(--bg);
+}
+
+.login-theme-toggle {
+  position: fixed;
+  top: 24px;
+  right: 28px;
+  z-index: 100;
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: var(--hint);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s, transform 0.3s;
+  line-height: 1;
+}
+
+.login-theme-toggle:hover {
+  color: var(--text);
+  transform: rotate(180deg);
+}

@@ -82,6 +82,11 @@ export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [showUnsavedModal, setShowUnsavedModal] = useState(false);
   const [pendingDate, setPendingDate] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 480);
@@ -285,6 +290,9 @@ export default function Home() {
   if (!session) {
     return (
       <div className="login-bg">
+        <button className="theme-toggle login-theme-toggle" onClick={() => setDarkMode(d => !d)} title={darkMode ? 'light mode' : 'dark mode'}>
+          ◐
+        </button>
         <div className="login-corner tl">◈</div>
         <div className="login-corner tr">◈</div>
         <div className="login-corner bl">◈</div>
@@ -317,6 +325,9 @@ export default function Home() {
       <header className="topbar">
         <span className="brand">◈ journal</span>
         <div className="user-area">
+          <button className="theme-toggle" onClick={() => setDarkMode(d => !d)}>
+            {darkMode ? '☀' : '☾'}
+          </button>
           <img src={session.user.image} alt="" className="avatar" />
           <button className="signout-btn" onClick={() => signOut()}>sign out</button>
         </div>
