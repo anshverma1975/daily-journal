@@ -82,10 +82,16 @@ export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [showUnsavedModal, setShowUnsavedModal] = useState(false);
   const [pendingDate, setPendingDate] = useState(null);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') === 'dark';
+    }
+    return false;
+  });
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+    localStorage.setItem('theme', darkMode ? 'dark' : 'light');
   }, [darkMode]);
 
   useEffect(() => {
