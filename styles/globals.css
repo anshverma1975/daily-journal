@@ -327,6 +327,7 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-left: auto;
 }
 
 .avatar {
@@ -1004,18 +1005,17 @@ body {
 .modal-btn.save:hover {
   background: #2d4435;
 }
-
 [data-theme="dark"] {
-  --bg: #141412;
-  --surface: #1a1916;
-  --border: #2a2825;
-  --text: #e8e4dc;
-  --muted: #6b6760;
-  --hint: #4a4845;
+  --bg: #1a1c18;
+  --surface: #222420;
+  --border: #323530;
+  --text: #f0ece4;
+  --muted: #a0a098;
+  --hint: #6a6a64;
   --accent: #6b9e7a;
   --accent-light: #1a2e1f;
   --dot: #6b9e7a;
-  --today-bg: #1f1e1a;
+  --today-bg: #2a2c28;
   --sel-bg: #3d5a47;
   --sel-text: #ffffff;
 }
@@ -1029,14 +1029,136 @@ body,
   transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
+[data-theme="dark"] .login-bg {
+  background: #1a1c18;
+}
+
+[data-theme="dark"] .login-bg::after {
+  background: radial-gradient(circle, rgba(107, 158, 122, 0.08), transparent 70%);
+}
+
+[data-theme="dark"] .login-title {
+  color: #f0ece4;
+}
+
+[data-theme="dark"] .login-sub {
+  color: #c0bdb5;
+}
+
+[data-theme="dark"] .login-footer {
+  color: #a0a098;
+}
+
+[data-theme="dark"] .login-top-line {
+  background: linear-gradient(to bottom, transparent, #323530);
+}
+
+[data-theme="dark"] .login-divider span:first-child,
+[data-theme="dark"] .login-divider span:last-child {
+  background: #323530;
+}
+
+[data-theme="dark"] .login-dot {
+  color: #6a6a64;
+}
+
+[data-theme="dark"] .login-corner {
+  color: #323530;
+}
+
 [data-theme="dark"] .google-btn {
-  background: #1a1916;
-  color: var(--muted);
+  background: #222420;
+  color: #c0bdb5;
+  border-color: #323530;
+}
+
+[data-theme="dark"] .google-btn:hover {
+  background: #2a2c28;
+  color: #f0ece4;
+  border-color: #6b9e7a;
+}
+
+[data-theme="dark"] .topbar {
+  background: #222420;
+  border-color: #323530;
+}
+
+[data-theme="dark"] .brand {
+  color: #f0ece4;
+}
+
+[data-theme="dark"] .signout-btn {
+  color: #a0a098;
+}
+
+[data-theme="dark"] .signout-btn:hover {
+  color: #f0ece4;
+}
+
+[data-theme="dark"] .cal-section {
+  background: #222420;
+  border-color: #323530;
+}
+
+[data-theme="dark"] .cal-title {
+  color: #f0ece4;
+}
+
+[data-theme="dark"] .cal-day {
+  color: #f0ece4;
+}
+
+[data-theme="dark"] .cal-day.other {
+  color: #6a6a64;
+}
+
+[data-theme="dark"] .legend {
+  color: #6a6a64;
+}
+
+[data-theme="dark"] .journal-date-full {
+  color: #f0ece4;
+}
+
+[data-theme="dark"] .journal-weekday {
+  color: #a0a098;
 }
 
 [data-theme="dark"] .journal-area {
-  background: var(--surface);
-  color: var(--text);
+  background: #222420;
+  color: #f0ece4;
+  border-color: #323530;
+}
+
+[data-theme="dark"] .journal-area::placeholder {
+  color: #6a6a64;
+}
+
+[data-theme="dark"] .wc {
+  color: #6a6a64;
+}
+
+[data-theme="dark"] .save-btn {
+  background: #3d5a47;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .future-note {
+  background: #2a2c28;
+  border-color: #323530;
+  color: #a0a098;
+}
+
+[data-theme="dark"] .theme-toggle {
+  color: #a0a098;
+  border: 1px solid #323530;
+  border-radius: 6px;
+  padding: 3px 7px;
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  color: #f0ece4;
+  background: #323530;
 }
 
 .theme-toggle {
@@ -1056,15 +1178,16 @@ body,
 
 .login-theme-toggle {
   position: fixed;
-  top: 24px;
-  right: 28px;
+  top: 20px;
+  right: 24px;
   z-index: 100;
   background: none;
-  border: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
   font-size: 14px;
   color: var(--hint);
   cursor: pointer;
-  padding: 4px;
+  padding: 4px 8px;
   transition: color 0.2s, transform 0.3s;
   line-height: 1;
 }
@@ -1072,4 +1195,35 @@ body,
 .login-theme-toggle:hover {
   color: var(--text);
   transform: rotate(180deg);
+}
+
+[data-theme="dark"] .day-labels span {
+  color: #c0bdb5 !important;
+}
+
+[data-theme="dark"] .journal-area::placeholder {
+  color: #c0bdb5 !important;
+  opacity: 1 !important;
+}
+[data-theme="dark"] .wc {
+  color: #c0bdb5 !important;
+}
+
+[data-theme="dark"] .signout-btn {
+  color: #a0a098 !important;
+}
+
+[data-theme="dark"] .legend {
+  color: #c0bdb5 !important;
+}
+
+[data-theme="dark"] .legend .dot-small {
+  background: #6b9e7a !important;
+}
+
+[data-theme="dark"] .toast {
+  background: #2a2c28;
+  color: #a8d4b0;
+  border-color: #3d5a47;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
