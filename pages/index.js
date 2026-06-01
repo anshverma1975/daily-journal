@@ -49,6 +49,47 @@ const SPLASH_MESSAGES = [
   "almost there…",
 ];
 
+const FUTURE_NOTES = [ 
+  "✦ the future is yet to arrive ✦",
+  "✦ waiting for future is worth it ✦",
+  "✦ this day is yet to arrive ✦",
+  "✦ future is not here yet ✦",
+  "✦ leave the future worries to future you ✦",
+  "✦ future is not here yet ✦",
+  "✦ this page belongs to a day not yet lived ✦",
+  "✦ the ink for this day remains unwritten ✦",
+  "✦ future you will fill these pages ✦",
+  "✦ this memory has not been made yet ✦",
+  "✦ this page waits patiently for its story ✦",
+  "✦ some words are meant for another sunrise ✦",
+  "✦ the future keeps its pages closed for now ✦",
+  "✦ some moments cannot be borrowed from tomorrow ✦",
+  "✦ time keeps this page closed for now ✦",
+  "✦ not all answers belong to the present ✦",
+  "✦ this day exists only as a possibility ✦",
+  "✦ the person who writes here has not arrived yet ✦",
+  "✦ every unwritten page contains countless lives ✦",
+  "✦ tomorrow is already coming, but not yet here ✦",
+  "✦ some thoughts must wait for their moment ✦",
+  "✦ the future reveals itself one day at a time ✦",
+  "✦ there are stories that only time can tell ✦",
+  "✦ this page belongs to a version of you still becoming ✦",
+  "✦ the horizon moves as you walk toward it ✦",
+  "✦ what is meant for this day is still on its way ✦",
+  "✦ even time has unopened letters ✦",
+  "✦ some pages are blank not from emptiness, but from patience ✦",
+  "✦ the universe has not reached this sentence yet ✦",
+  "✦ every future memory begins as silence ✦",
+  "✦ this moment remains undiscovered ✦",
+  "✦ the river of time has not carried you here yet ✦",
+  "✦ the future is not a place—it is a becoming ✦",
+  "✦ there is wisdom in an unwritten page ✦",
+  "✦ today's absence is tomorrow's memory ✦",
+  "✦ the clock knows a path you have not walked ✦",
+  "✦ this day is still hidden within the fabric of time ✦",
+  "✦ some doors open only when their hour arrives ✦",
+];
+
 function toKey(y, m, d) {
   return `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 }
@@ -63,6 +104,10 @@ function randomPlaceholder() {
   return PLACEHOLDERS[Math.floor(Math.random() * PLACEHOLDERS.length)];
 }
 
+function randomFuturenote() {
+  return FUTURE_NOTES[Math.floor(Math.random() * FUTURE_NOTES.length)];
+}
+
 export default function Home() {
   const { data: session, status } = useSession();
   const today = new Date();
@@ -75,6 +120,7 @@ export default function Home() {
   const [saving, setSaving] = useState(false);
   const isFuture = new Date(selected.y, selected.m, selected.d) > today;
   const [placeholder, setPlaceholder] = useState(randomPlaceholder);
+  const [futureNote, setFutureNote] = useState(randomFuturenote);
   const [toast, setToast] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
   const [splash, setSplash] = useState(true);
@@ -93,6 +139,7 @@ export default function Home() {
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
     localStorage.setItem('theme', darkMode ? 'dark' : 'light');
   }, [darkMode]);
+
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 480);
@@ -264,6 +311,14 @@ export default function Home() {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [handleSave]);
+
+  useEffect(() => {
+    const selectedDate = new Date(selected.y, selected.m, selected.d);
+
+    if (selectedDate > new Date()) {
+      setFutureNote(randomFuturenote());
+    }
+  }, [selected]);
 
   function buildCalendar() {
     const firstDay = new Date(year, month, 1).getDay();
@@ -452,7 +507,7 @@ export default function Home() {
           />
           {isFuture && (
             <p className="future-note">
-              ✦ this day is yet to arrive
+              {futureNote}
             </p>
           )}
           <div className="wc">{wordCount(draft)} {wordCount(draft) === 1 ? "word" : "words"}</div>
