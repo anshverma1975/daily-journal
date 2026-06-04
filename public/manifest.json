@@ -1,0 +1,47 @@
+{
+    "id": "/",
+    "name": "journal",
+    "short_name": "journal",
+    "description": "a quiet place to write every day",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f7f5f0",
+    "theme_color": "#3d5a47",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/screenshot-mobile.png",
+            "sizes": "390x844",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "journal app"
+        },
+        {
+            "src": "/screenshot-desktop.png",
+            "sizes": "1920x1080",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "journal app"
+        }
+    ]
+}
