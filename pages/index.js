@@ -250,11 +250,11 @@ export default function Home() {
   }, [session]);
 
   useEffect(() => {
-    if (!session) return;
-    fetch("/api/entries")
-      .then((r) => r.json())
-      .then(setEntries);
-  }, [session]);
+  const key = toKey(selected.y, selected.m, selected.d);
+  const localDraft = localStorage.getItem(`draft-${key}`);
+  setDraft(entries[key] || localDraft || "");
+  setSaved(false);
+  }, [selected, entries]);
 
   useEffect(() => {
     const key = toKey(selected.y, selected.m, selected.d);
@@ -262,26 +262,27 @@ export default function Home() {
     setSaved(false);
   }, [selected, entries]);
 
-  const handleSave = useCallback(async () => {
-    setSaving(true);
-    const key = toKey(selected.y, selected.m, selected.d);
-    await fetch("/api/entries", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ date: key, text: draft }),
-    });
-    setEntries((prev) => {
-      const next = { ...prev };
-      if (draft.trim()) next[key] = draft;
-      else delete next[key];
-      return next;
-    });
-    setSaving(false);
-    setSaved(true);
-    setToast(true);
-    setToastMsg(TOAST_MESSAGES[Math.floor(Math.random() * TOAST_MESSAGES.length)]);
-    setTimeout(() => { setSaved(false); setToast(false); }, 2000);
-  }, [selected, draft]);
+ const handleSave = useCallback(async () => {
+  setSaving(true);
+  const key = toKey(selected.y, selected.m, selected.d);
+  localStorage.removeItem(`draft-${key}`);
+  await fetch("/api/entries", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ date: key, text: draft }),
+  });
+  setEntries((prev) => {
+    const next = { ...prev };
+    if (draft.trim()) next[key] = draft;
+    else delete next[key];
+    return next;
+  });
+  setSaving(false);
+  setSaved(true);
+  setToast(true);
+  setToastMsg(TOAST_MESSAGES[Math.floor(Math.random() * TOAST_MESSAGES.length)]);
+  setTimeout(() => { setSaved(false); setToast(false); }, 2000);
+}, [selected, draft]);
 
   const handlePendingNav = useCallback(async (save) => {
     if (save) await handleSave();
@@ -493,7 +494,7 @@ export default function Home() {
           <textarea
             className="journal-area"
             value={draft}
-            onChange={e => { setDraft(e.target.value); setSaved(false); }}
+            onChange={e => { setDraft(e.target.value); setSaved(false);const key = toKey(selected.y, selected.m, selected.d);localStorage.setItem(`draft-${key}`, e.target.value);}}
             placeholder={isFuture ? "" : placeholder}
             autoFocus
             disabled={isFuture}
