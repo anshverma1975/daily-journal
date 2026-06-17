@@ -250,6 +250,8 @@ export default function Home() {
   }, [session]);
 
   useEffect(() => {
+  if (!session) return;
+  if (Object.keys(entries).length === 0) return;
   const key = toKey(selected.y, selected.m, selected.d);
   if (entries[key] !== undefined) {
     setDraft(entries[key]);
@@ -258,7 +260,7 @@ export default function Home() {
     setDraft(localDraft || "");
   }
   setSaved(false);
-}, [selected, entries]);
+}, [selected, entries, session]);
 
  const handleSave = useCallback(async () => {
   setSaving(true);
