@@ -251,10 +251,14 @@ export default function Home() {
 
   useEffect(() => {
   const key = toKey(selected.y, selected.m, selected.d);
-  const localDraft = localStorage.getItem(`draft-${key}`);
-  setDraft(entries[key] || localDraft || "");
+  if (entries[key] !== undefined) {
+    setDraft(entries[key]);
+  } else {
+    const localDraft = localStorage.getItem(`draft-${key}`);
+    setDraft(localDraft || "");
+  }
   setSaved(false);
-  }, [selected, entries]);
+}, [selected, entries]);
 
   useEffect(() => {
     const key = toKey(selected.y, selected.m, selected.d);
