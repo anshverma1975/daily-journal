@@ -260,12 +260,6 @@ export default function Home() {
   setSaved(false);
 }, [selected, entries]);
 
-  useEffect(() => {
-    const key = toKey(selected.y, selected.m, selected.d);
-    setDraft(entries[key] || "");
-    setSaved(false);
-  }, [selected, entries]);
-
  const handleSave = useCallback(async () => {
   setSaving(true);
   const key = toKey(selected.y, selected.m, selected.d);
