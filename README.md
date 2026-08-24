@@ -43,3 +43,7 @@ npm run dev
 
 > *"the life of every man is a diary in which he means to write one story, and writes another."*
 > — J.M. Barrie
+>
+
+<img src="https://api.visitorbadge.io/api/VisitorHit?user=anshverma1975&repo=daily-journal&label=VIEWS&countColor=7c3aed&labelColor=1e1b4b" alt="Views" />
+
